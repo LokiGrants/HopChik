@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
     public CharacterController playerControl;
+    public GameObject deadPanel;
 
     public float actPlayerSpeed;
     //public float playerSprint;
@@ -20,30 +22,77 @@ public class PlayerController : MonoBehaviour
     private bool jumping = false;
     private float timeForNextIdle;
 
+    private Vector3 touchStartPosition, touchEndPosition;
+    private float originalSpeed;
+
     private void Start()
     {
+        originalSpeed = actPlayerSpeed;
         timeForNextIdle = Time.timeSinceLevelLoad + Random.Range(30, 60) / 10f;
         playerAnimator = GetComponent<Animator>();
     }
 
     private void GetInput()
     {
-        playerMotionVector = new Vector3(Input.GetAxis("Horizontal"), 0, 0);
+        if (playerControl.isGrounded)
+        {
+            if (jumping)
+            {
+                jumping = false;
+                playerAnimator.SetBool("Jump", jumping);
+            }
+        }
 
-        if (Input.GetAxis("Horizontal") > 0)
+        if (Input.touchCount > 0)
         {
-            if (isFacingLeft)
+            Touch touch = Input.GetTouch(0);
+
+            // Move the cube if the screen has the finger moving.
+            if (touch.phase == TouchPhase.Moved || touch.phase == TouchPhase.Ended) //jump if up
             {
-                isFacingLeft = false;
-                StartCoroutine(LerpFunction(Quaternion.Euler(new Vector3(0, 90, 0)), .25f));
+                touchEndPosition = touch.position;
+
+
+                float x = touchEndPosition.x - touchStartPosition.x;
+                float y = touchEndPosition.y - touchStartPosition.y;
+
+                if (Mathf.Abs(x) != 0 && Mathf.Abs(y) != 0) //Tap
+                {
+                    if (!(Mathf.Abs(x) > Mathf.Abs(y))) //Left Right
+                    {
+                        //else
+                        if (y > 0)
+                        {
+                            Jump();
+                        }
+                    }
+                }
             }
-        } else if (Input.GetAxis("Horizontal") < 0)
+            else if (touch.phase == TouchPhase.Began || touch.phase == TouchPhase.Stationary)
+            {
+                touchStartPosition = touch.position;
+
+                playerMotionVector = new Vector3(touchStartPosition.x < Screen.width / 2 ? -1 : 1, 0, 0);
+
+                if (playerMotionVector.x > 0)
+                {
+                    if (isFacingLeft)
+                    {
+                        isFacingLeft = false;
+                        StartCoroutine(LerpFunction(Quaternion.Euler(new Vector3(0, 90, 0)), .25f));
+                    }
+                } else
+                {
+                    if (!isFacingLeft)
+                    {
+                        isFacingLeft = true;
+                        StartCoroutine(LerpFunction(Quaternion.Euler(new Vector3(0, -90, 0)), .25f));
+                    }
+                }
+            }
+        } else
         {
-            if (!isFacingLeft)
-            {
-                isFacingLeft = true;
-                StartCoroutine(LerpFunction(Quaternion.Euler(new Vector3(0, -90, 0)), .25f));
-            }
+            playerMotionVector = Vector3.zero;
         }
 
 
@@ -71,6 +120,18 @@ public class PlayerController : MonoBehaviour
         //}
     }
 
+    public void OnBecameInvisible()
+    {
+        deadPanel.SetActive(true);
+        gameObject.SetActive(false);
+    }
+
+    private void Jump()
+    {
+        jumping = true;
+        playerAnimator.SetBool("Jump", jumping);
+    }
+
     private void Movement()
     {
         playerAnimator.SetBool("Walk", false);
@@ -86,7 +147,8 @@ public class PlayerController : MonoBehaviour
             {
                 playerAnimator.SetBool("Walk", true);
                 timeForNextIdle += Time.fixedDeltaTime;
-            } else
+            }
+            else
             {
                 if (Time.timeSinceLevelLoad > timeForNextIdle)
                 {
@@ -103,29 +165,40 @@ public class PlayerController : MonoBehaviour
                         this.Invoke(() => DisableAnimation("Eat"), 1f);
                     }
 
-                    timeForNextIdle = Time.timeSinceLevelLoad + Random.Range(30,60)/10f;
+                    timeForNextIdle = Time.timeSinceLevelLoad + Random.Range(30, 60) / 10f;
                 }
             }
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Enemy")
+        {
+            OnBecameInvisible();
+        } else if (other.tag == "Water")
+        {
+            actPlayerSpeed *= 0.8f;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Water")
+        {
+            actPlayerSpeed = originalSpeed;
+        }
+    }
+
     private void FixedUpdate()
     {
-        if (Input.GetAxis("Jump") != 0 && playerControl.isGrounded)
-        {
-            jumping = true;
-            playerAnimator.SetBool("Jump", jumping);
-        }
-        else if (playerControl.isGrounded)
-        {
-            if (jumping)
-            {
-                jumping = false;
-                playerAnimator.SetBool("Jump", jumping);
-            }
-        }
         GetInput();
         Movement();
+
+        if (transform.position.y < -1)
+        {
+            OnBecameInvisible();
+        }
     }
 
     void DisableAnimation(string boolName)
