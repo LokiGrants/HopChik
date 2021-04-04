@@ -43,6 +43,34 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+#if UNITY_EDITOR
+        playerMotionVector = new Vector3(Input.GetAxis("Horizontal"), 0, 0);
+
+        if (Input.GetAxis("Horizontal") > 0)
+        {
+            if (isFacingLeft)
+            {
+                isFacingLeft = false;
+                StartCoroutine(LerpFunction(Quaternion.Euler(new Vector3(0, 90, 0)), .25f));
+            }
+        }
+        else if (Input.GetAxis("Horizontal") < 0)
+        {
+            if (!isFacingLeft)
+            {
+                isFacingLeft = true;
+                StartCoroutine(LerpFunction(Quaternion.Euler(new Vector3(0, -90, 0)), .25f));
+            }
+        }
+
+        if (Input.GetAxis("Vertical") > 0)
+        {
+            if (playerControl.isGrounded)
+            {
+                Jump();
+            }
+        }
+#else
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
@@ -94,6 +122,7 @@ public class PlayerController : MonoBehaviour
         {
             playerMotionVector = Vector3.zero;
         }
+#endif
 
 
         //Get input from WASD keys.

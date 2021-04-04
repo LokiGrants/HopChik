@@ -8,7 +8,9 @@ Shader "Skybox/Cubemap Extended"
 		[StyledBanner(Skybox Cubemap Extended)]_SkyboxExtended("< SkyboxExtended >", Float) = 1
 		[StyledCategory(Cubemap, 5, 10)]_Cubemapp("[ Cubemapp ]", Float) = 1
 		[NoScaleOffset]_Tex("Cubemap (HDR)", CUBE) = "black" {}
+		[NoScaleOffset]_Tex2("Cubemap (HDR)", CUBE) = "black" {}
 		_Exposure("Cubemap Exposure", Range( 0 , 8)) = 1
+		_Blend("Texture Blend", Range(0,1)) = 0.0
 		[Gamma]_TintColor("Cubemap Tint Color", Color) = (0.5,0.5,0.5,1)
 		_CubemapPosition("Cubemap Position", Float) = 0
 		[StyledCategory(Rotation)]_Rotationn("[ Rotationn ]", Float) = 1
@@ -96,11 +98,13 @@ Shader "Skybox/Cubemap Extended"
 			uniform half _Fogg;
 			uniform half _Rotationn;
 			uniform samplerCUBE _Tex;
+			uniform samplerCUBE _Tex2;
 			uniform float _CubemapPosition;
 			uniform half _Rotation;
 			uniform half _RotationSpeed;
 			uniform half4 _TintColor;
 			uniform half _Exposure;
+			uniform half _Blend;
 			uniform float _FogPosition;
 			uniform half _FogHeight;
 			uniform half _FogSmoothness;
@@ -170,7 +174,7 @@ Shader "Skybox/Cubemap Extended"
 				float3 WorldPosition = i.worldPos;
 				#endif
 				float3 vertexToFrag774 = i.ase_texcoord1.xyz;
-				half4 Data1189 = texCUBE( _Tex, vertexToFrag774 );
+				half4 Data1189 = lerp(texCUBE(_Tex, vertexToFrag774), texCUBE(_Tex2, vertexToFrag774), _Blend);
 				half3 localDecodeHDR1189 = DecodeHDR1189( Data1189 );
 				half4 CUBEMAP222 = ( float4( localDecodeHDR1189 , 0.0 ) * unity_ColorSpaceDouble * _TintColor * _Exposure );
 				float lerpResult678 = lerp( saturate( pow( (0.0 + (abs( ( i.ase_texcoord2.xyz.y + -_FogPosition ) ) - 0.0) * (1.0 - 0.0) / (_FogHeight - 0.0)) , ( 1.0 - _FogSmoothness ) ) ) , 0.0 , _FogFill);

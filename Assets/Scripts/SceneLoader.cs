@@ -13,7 +13,7 @@ public class SceneLoader : MonoBehaviour
     /// </summary>
     public void OnLoadSceneCalled()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void OnLoadSceneCalled(int sceneNum)
