@@ -3,20 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(CameraFollow))]
-public class DayNightCycleController : MonoBehaviour
+public class DayNightCycleController : Singleton<DayNightCycleController>
 {
     public Material sky;
     public Light directionalLight;
-    public CameraFollow cameraFollow;
     public float blendThreshold;
 
     public Gradient gradient;
 
     private float valueForGradientPosition;
     private float currentBlend;
+    private CameraFollow cameraFollow;
 
     private void Start()
     {
+        cameraFollow = CameraFollow.Instance;
         currentBlend = 0f;
         sky.SetFloat("_Blend", currentBlend);
         valueForGradientPosition = cameraFollow.maxPos.x - cameraFollow.minPos.x;

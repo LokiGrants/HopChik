@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : Singleton<PlayerController>
 {
     public CharacterController playerControl;
     public GameObject deadPanel;
@@ -151,6 +151,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnBecameInvisible()
     {
+        DeathCounter.Instance.DeadCounter();
         deadPanel.SetActive(true);
         gameObject.SetActive(false);
     }

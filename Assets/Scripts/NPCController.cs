@@ -22,7 +22,7 @@ public class NPCController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        target = GameObject.FindGameObjectWithTag("Player").transform;
+        target = PlayerController.Instance.transform;
         agent = GetComponent<NavMeshAgent>();
         agent.SetDestination(waypoints[currentWaypoint].position);
 
@@ -39,12 +39,12 @@ public class NPCController : MonoBehaviour
         if (distanceToTarget < distanceToStartFollowing && !chasing)
         {
             RaycastHit hit;
-            Debug.DrawRay(raycastPoint.position, targetPosition - raycastPoint.position);
+            //Debug.DrawRay(raycastPoint.position, targetPosition - raycastPoint.position);
             if (Physics.Raycast(raycastPoint.position, targetPosition - raycastPoint.position, out hit))
             {
                 if (hit.transform.tag == "Player")
                 {
-                    Debug.Log(" i hit a tag = " + hit.transform.name);
+                    //Debug.Log(" i hit a tag = " + hit.transform.name);
                     agent.SetDestination(targetPosition);
                     agent.speed *= 1.5f;
                     chasing = true;
@@ -53,7 +53,7 @@ public class NPCController : MonoBehaviour
         } else if (chasing)
         {
             agent.SetDestination(targetPosition);
-            Debug.Log("distance caught: " + distanceToGetCaught + " distance target: " + distanceToTarget);
+            //Debug.Log("distance caught: " + distanceToGetCaught + " distance target: " + distanceToTarget);
             if (distanceToTarget < distanceToGetCaught)
             {
                 target.gameObject.GetComponent<PlayerController>().OnBecameInvisible();
