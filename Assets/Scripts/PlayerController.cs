@@ -24,12 +24,26 @@ public class PlayerController : Singleton<PlayerController>
 
     private Vector3 touchStartPosition, touchEndPosition;
     private float originalSpeed;
+    private Vector3 lastCheckpoint;
 
     private void Start()
     {
+        lastCheckpoint = transform.position;
         originalSpeed = actPlayerSpeed;
         timeForNextIdle = Time.timeSinceLevelLoad + Random.Range(30, 60) / 10f;
         playerAnimator = GetComponent<Animator>();
+    }
+
+    public void Respawn()
+    {
+        transform.position = lastCheckpoint;
+        gameObject.SetActive(true);
+        //Hold player input for 3 seconds, if possible.
+    }
+
+    public void ChangeCheckpoint(Transform transformCheckpoint)
+    {
+        lastCheckpoint = transformCheckpoint.position;
     }
 
     private void GetInput()
