@@ -165,8 +165,9 @@ public class PlayerController : Singleton<PlayerController>
 
     public void OnBecameInvisible()
     {
-        DeathCounter.Instance.DeadCounter();
+        GameFlags.Instance.DeadCounter();
         deadPanel.SetActive(true);
+        IAPManager.Instance.DeadPlayer();
         gameObject.SetActive(false);
     }
 

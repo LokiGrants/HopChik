@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DeathCounter : Singleton<DeathCounter>
+public class GameFlags : Singleton<GameFlags>
 {
     [HideInInspector]
     public int deathCounter;
