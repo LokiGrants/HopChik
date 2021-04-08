@@ -24,6 +24,11 @@ public class IAPManager : Singleton<IAPManager>
         isNoAdsAvailable = true;
         PlayerPrefs.SetString("NoAds", "true");
 
+        Invoke("WaitToCallAfterAdsPurchaseComplete", .1f);
+    }
+
+    public void WaitToCallAfterAdsPurchaseComplete()
+    {
         iapConfirmPanel.SetActive(false);
         failureImage.SetActive(false);
         watchAdButton.SetActive(false);
