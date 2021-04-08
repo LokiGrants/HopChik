@@ -10,5 +10,6 @@ public class DeathCounter : Singleton<DeathCounter>
     public void DeadCounter()
     {
         deathCounter++;
+        AnalyticsManager.instance.recordEvent("Death");
     }
 }
