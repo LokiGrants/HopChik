@@ -54,7 +54,7 @@ public class IAPManager : Singleton<IAPManager>
             failureImage.SetActive(false);
             watchAdButton.SetActive(false);
             iapButton.SetActive(false);
-            purchasePanel.SetActive(true);
+            purchasePanel.SetActive(false);
             sucessImage.SetActive(true);
             reviveButton.SetActive(true);
         }

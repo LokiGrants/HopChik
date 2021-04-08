@@ -9,7 +9,7 @@ public class AnalyticsController : MonoBehaviour
 
     public void recordEvent()
     {
-        AnalyticsManager.instance.recordEvent(eventName);
+        AnalyticsManager.Instance.recordEvent(eventName);
     }
 
 }

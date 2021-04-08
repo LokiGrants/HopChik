@@ -22,6 +22,7 @@ public class NPCController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        currentWaypoint = Random.Range(0, waypoints.Count);
         target = PlayerController.Instance.transform;
         agent = GetComponent<NavMeshAgent>();
         agent.SetDestination(waypoints[currentWaypoint].position);

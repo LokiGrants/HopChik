@@ -10,6 +10,6 @@ public class GameFlags : Singleton<GameFlags>
     public void DeadCounter()
     {
         deathCounter++;
-        AnalyticsManager.instance.recordEvent("Death");
+        AnalyticsManager.Instance.recordEvent("Death");
     }
 }
