@@ -7,6 +7,7 @@ public class PlayerController : Singleton<PlayerController>
 {
     public CharacterController playerControl;
     public GameObject deadPanel;
+    public GameObject victoryPanel;
 
     public float actPlayerSpeed;
     //public float playerSprint;
@@ -226,6 +227,10 @@ public class PlayerController : Singleton<PlayerController>
         } else if (other.tag == "Water")
         {
             actPlayerSpeed *= 0.8f;
+        } else if (other.tag == "Victory")
+        {
+            victoryPanel.SetActive(true);
+            PauseController.Instance.OnPause();
         }
     }
 
