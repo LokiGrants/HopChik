@@ -10,6 +10,7 @@ public class CheckpointController : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
+        //Might need a check on player to avoid enemy collision
         if (arrivedAtCheckpoint == null)
         {
             arrivedAtCheckpoint = StartCoroutine(ArrivedAtCheckpoint());
