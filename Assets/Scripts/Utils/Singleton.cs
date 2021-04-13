@@ -39,5 +39,12 @@ public class Singleton<T> : MonoBehaviour where T : Singleton<T>
         {
             DontDestroyOnLoad(gameObject);
         }
+
+        ExtraToDo();
+    }
+
+    public virtual void ExtraToDo()
+    {
+
     }
 }

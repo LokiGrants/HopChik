@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Audio;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -178,6 +179,8 @@ public class PlayerController : Singleton<PlayerController>
     {
         jumping = true;
         playerAnimator.SetBool("Jump", jumping);
+
+        AudioManager.Instance.PlayAudio(AudioTypeEnum.SoundEffects_01, 0f, true, .1f);
     }
 
     private void Movement()

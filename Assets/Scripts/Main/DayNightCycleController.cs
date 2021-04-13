@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Audio;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,12 +16,16 @@ public class DayNightCycleController : Singleton<DayNightCycleController>
     private float currentBlend;
     private CameraFollow cameraFollow;
 
+    private bool isDay = true;
+
     private void Start()
     {
         cameraFollow = CameraFollow.Instance;
         currentBlend = 0f;
         sky.SetFloat("_Blend", currentBlend);
         valueForGradientPosition = cameraFollow.maxPos.x - cameraFollow.minPos.x;
+
+        AudioManager.Instance.PlayAudio(AudioTypeEnum.SoundTrack_02, 0, true, 0.5f, true, 0.5f);
     }
 
     private void FixedUpdate()
@@ -37,10 +42,22 @@ public class DayNightCycleController : Singleton<DayNightCycleController>
         {
             currentBlend = (currValue - blendThreshold) / (1f - blendThreshold);
             sky.SetFloat("_Blend", currentBlend);
+
+            if (isDay)
+            {
+                isDay = !isDay;
+                AudioManager.Instance.PlayAudio(AudioTypeEnum.SoundTrack_03, 0, true, 0.5f, true, 0.5f);
+            }
         } else if (currentBlend > 0f)
         {
             currentBlend = 0f;
             sky.SetFloat("_Blend", currentBlend);
+
+            if (!isDay)
+            {
+                isDay = !isDay;
+                AudioManager.Instance.PlayAudio(AudioTypeEnum.SoundTrack_02, 0, true, 0.5f, true, 0.5f);
+            }
         }
     }
 }
