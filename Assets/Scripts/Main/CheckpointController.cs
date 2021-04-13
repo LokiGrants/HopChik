@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Audio;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,6 +22,7 @@ public class CheckpointController : MonoBehaviour
     {
         ObjectPoolingManager.Instance.SwitchCheckpoint();
         //Particles to start for movement or animation
+        AudioManager.Instance.PlayAudio(AudioTypeEnum.SoundEffects_02, 0f, true, .1f);
         yield return new WaitForSeconds(checkpointMoveWaitTime);
         ObjectPoolingManager.Instance.MoveCheckpoint();
 
