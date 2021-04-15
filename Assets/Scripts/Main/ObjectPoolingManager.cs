@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class ObjectPoolingManager : Singleton<ObjectPoolingManager>
 {
     public Transform checkpointObject;
     public List<Transform> checkpointPositions;
+    public TextMeshProUGUI checkpointText;
 
     public Material checkpointMaterial, checkpointMaterialShadow;
     public List<Texture> allPossibleFoods;
@@ -27,6 +29,7 @@ public class ObjectPoolingManager : Singleton<ObjectPoolingManager>
     public void MoveCheckpoint()
     {
         listIndex++;
+        checkpointText.text = (listIndex - 1) + "/" + (checkpointPositions.Count - 1);
         if (listIndex < checkpointPositions.Count-1)
         {
             checkpointObject.position = checkpointPositions[listIndex].position;
