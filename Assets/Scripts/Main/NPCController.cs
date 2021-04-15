@@ -28,7 +28,7 @@ public class NPCController : MonoBehaviour
         agent.SetDestination(waypoints[currentWaypoint].position);
 
         playerCharacterController = target.gameObject.GetComponent<CharacterController>();
-        distanceToGetCaught = (playerCharacterController.radius + agent.radius);
+        distanceToGetCaught = (playerCharacterController.radius);
     }
 
     // Update is called once per frame
@@ -58,6 +58,12 @@ public class NPCController : MonoBehaviour
             if (distanceToTarget < distanceToGetCaught)
             {
                 target.gameObject.GetComponent<PlayerController>().OnBecameInvisible();
+                chasing = false;
+                agent.speed /= 1.5f;
+                agent.SetDestination(waypoints[currentWaypoint].position);
+            }
+            else if (distanceToTarget > distanceToStartFollowing * 1.5f)
+            {
                 chasing = false;
                 agent.speed /= 1.5f;
                 agent.SetDestination(waypoints[currentWaypoint].position);
