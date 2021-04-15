@@ -10,13 +10,13 @@ public class DeathTextController : MonoBehaviour
     private void Start()
     {
         deathText = GetComponent<TextMeshProUGUI>();
-        deathText.text = "Deaths in this session: " + GameFlags.Instance.deathCounter;
+        deathText.text = GameFlags.Instance.deathCounter.ToString();
     }
 
     private void OnEnable()
     {
         if (deathText == null)
             deathText = GetComponent<TextMeshProUGUI>();
-        deathText.text = "Deaths in this session: " + GameFlags.Instance.deathCounter;
+        deathText.text = GameFlags.Instance.deathCounter.ToString();
     }
 }
