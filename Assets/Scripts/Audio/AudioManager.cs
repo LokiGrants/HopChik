@@ -250,10 +250,13 @@ namespace Audio
 
         private void Dispose()
         {
-            foreach(DictionaryEntry entry in jobTable)
+            if (jobTable != null)
             {
-                IEnumerator job = (IEnumerator)entry.Value;
-                StopCoroutine(job);
+                foreach (DictionaryEntry entry in jobTable)
+                {
+                    IEnumerator job = (IEnumerator)entry.Value;
+                    StopCoroutine(job);
+                }
             }
         }
 
